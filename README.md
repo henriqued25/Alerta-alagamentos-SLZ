@@ -7,7 +7,7 @@ Plataforma de monitoramento de alagamentos em tempo real com alertas por gravida
 - Font Awesome (ícones)
 
 
-## ✅ Funcionalidades Implementadas
+## Funcionalidades Implementadas
 - **Sistema de alertas visuais** por gravidade:
   - 🔴 `perigo` (vermelho) - Risco iminente
   - 🟠 `critico` (laranja) - Alerta elevado
