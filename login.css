@@ -1,0 +1,81 @@
+/* login.css - Estilos específicos para página de login */
+
+.pagina-login {
+    max-width: 400px;
+    margin: 3rem auto 5rem auto;
+    background-color: white;
+    padding: 2rem;
+    border-radius: var(--borda-arredondada);
+    box-shadow: var(--sombra);
+}
+
+.formulario-login h2 {
+    margin-bottom: 1.5rem;
+    color: var(--cor-primaria);
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.6rem;
+}
+
+.grupo-formulario {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin-bottom: 1rem;
+}
+
+.grupo-formulario label {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--cor-escura);
+}
+
+.grupo-formulario input {
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: var(--borda-arredondada);
+    transition: var(--transicao);
+}
+
+.grupo-formulario input:focus {
+    outline: none;
+    border-color: var(--cor-primaria);
+    box-shadow: 0 0 5px var(--cor-primaria);
+}
+
+.botao-primario {
+    width: 100%;
+    padding: 12px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    background-color: var(--cor-primaria);
+    color: var(--cor-texto-claro);
+    border: none;
+    border-radius: var(--borda-arredondada);
+    cursor: pointer;
+    transition: var(--transicao);
+}
+
+.botao-primario:hover {
+    background-color: #134b63;
+    transform: translateY(-2px);
+}
+
+.grupo-formulario.esqueci-senha {
+    text-align: right;
+    margin-bottom: 1.5rem;
+}
+
+.grupo-formulario.esqueci-senha a {
+    font-size: 0.9rem;
+    color: var(--cor-primaria);
+    text-decoration: none;
+    transition: var(--transicao);
+}
+
+.grupo-formulario.esqueci-senha a:hover {
+    text-decoration: underline;
+}
