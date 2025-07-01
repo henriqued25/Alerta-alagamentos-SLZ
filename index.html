@@ -83,7 +83,7 @@
                     <div class="card-painel principal">
                         <h3>Mapa de Alagamentos</h3>
                         <div class="area-mapa">
-                            <img src="https://maps.googleapis.com/maps/api/staticmap?center=Sao+Luis,MA&zoom=12&size=600x300&maptype=roadmap" alt="Mapa de São Luís">
+                            <div id="map" style="height: 100%; width: 100%;"></div>
                             <div class="sobreposicao-mapa">
                                 <div class="legenda-mapa">
                                      <div class="item-legenda"><span class="ponto perigo"></span> Perigo</div>
@@ -226,6 +226,9 @@
         </div>
     </footer>
 
+    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBRHED5Mz4zbwqMxP8fpY6nclzpe1aVSS8&callback=initMap"></script>
     <script src="script.js"></script>
 </body>
 </html>
