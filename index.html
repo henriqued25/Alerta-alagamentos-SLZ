@@ -118,21 +118,21 @@
                         <h3>Relatar Alagamento</h3>
                         <form class="formulario-relato">
                             <div class="grupo-formulario">
-                                <label for="localizacao">Localização</label>
-                                <input type="text" id="localizacao" placeholder="Digite o endereço ou bairro">
+                                <label for="localizacao">Localização (Bairro/Endereço)</label>
+                                <input type="text" id="localizacao" placeholder="Digite o bairro ou endereço afetado" required>
                             </div>
                             <div class="grupo-formulario">
-                                <label for="gravidade">Gravidade</label>
-                                <select id="gravidade">
+                                <label for="gravidade">Nível de Impacto</label>
+                                <select id="gravidade" required>
                                     <option value="">Selecione...</option>
-                                    <option value="baixa">Leve (até 30cm)</option>
-                                    <option value="media">Moderado (30cm-1m)</option>
-                                    <option value="alta">Grave (acima de 1m)</option>
+                                    <option value="baixa">Leve (pouca água, sem grandes transtornos)</option>
+                                    <option value="media">Moderado (água na rua, trânsito lento)</option>
+                                    <option value="alta">Grave (água em calçadas/casas, risco de segurança)</option>
                                 </select>
                             </div>
                             <div class="grupo-formulario">
-                                <label for="foto">Adicionar foto (opcional)</label>
-                                <input type="file" id="foto">
+                                <label for="observacoes">Observações (opcional)</label>
+                                <textarea id="observacoes" rows="3" placeholder="Detalhes adicionais sobre o alagamento..."></textarea>
                             </div>
                             <button type="submit" class="botao botao-primario">Enviar Relato</button>
                         </form>

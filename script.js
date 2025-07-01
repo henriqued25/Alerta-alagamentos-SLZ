@@ -25,7 +25,7 @@ function initMap() {
 
 
 document.addEventListener('DOMContentLoaded', function() {
-    const API_BASE_URL = 'https://alerta-alagamentos-sls.onrender.com/api';
+    const API_BASE_URL = 'https://alerta-alagamentos-sls.onrender.com/api'; // Sua URL base da API
 
     // --- Menu mobile ---
     const botaoMenu = document.querySelector('.botao-menu-mobile');
@@ -50,33 +50,103 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // --- Formulário de relato (será integrado à API em breve) ---
-    const formularioRelato = document.querySelector('.formulario-relato'); 
+    // --- Formulário de relato
+   const formularioRelato = document.querySelector('.formulario-relato');
     if (formularioRelato) {
-        formularioRelato.addEventListener('submit', function(e) {
+        formularioRelato.addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            const localizacao = this.querySelector('#localizacao').value;
-            const gravidade = this.querySelector('#gravidade').value;
-            
-            if (!localizacao || !gravidade) {
+            // 1. Coletar dados do formulário
+            const localizacaoInput = document.getElementById('localizacao').value.trim();
+            const gravidadeInput = document.getElementById('gravidade').value; // Será usado para 'impactos'
+            const observacoesInput = document.getElementById('observacoes').value.trim(); // Novo campo 'observacoes'
+
+            // 2. Validação frontend
+            if (!localizacaoInput || !gravidadeInput) {
                 Swal.fire({
                     icon: 'warning',
                     title: 'Atenção',
-                    text: 'Por favor, preencha todos os campos obrigatórios!',
+                    text: 'Por favor, preencha todos os campos obrigatórios (Localização e Gravidade)!',
                     confirmButtonColor: '#010101'
                 });
                 return;
             }
-            
-            console.log('Relato enviado:', { localizacao, gravidade });
-            Swal.fire({
-                icon: 'success',
-                title: 'Sucesso!',
-                text: 'Relato enviado com sucesso! Obrigado por contribuir.',
-                confirmButtonColor: '#010101'
-            });
-            this.reset();
+
+            // 3. Preparar os dados para envio (sem latitude/longitude)
+            const relatoData = {
+                bairro: localizacaoInput, 
+                impactos: gravidadeInput,   
+                observacoes: observacoesInput, 
+            };
+
+            // 4. Obter o token de autenticação
+            const authToken = localStorage.getItem('authToken');
+            if (!authToken) {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Não autenticado',
+                    text: 'Você precisa estar logado para relatar um alagamento.',
+                    confirmButtonColor: '#010101'
+                });
+                return;
+            }
+
+            // 5. Enviar para a API
+            try {
+                Swal.fire({
+                    title: 'Enviando Relato...',
+                    text: 'Por favor, aguarde.',
+                    icon: 'info',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                const response = await fetch(`${API_BASE_URL}/complaints`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify(relatoData) // Envia os dados como JSON
+                });
+
+                const responseData = await response.json();
+
+                if (response.ok) { // Status 2xx
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Relato Enviado!',
+                        text: 'Seu relato de alagamento foi enviado com sucesso. Obrigado por contribuir!',
+                        confirmButtonColor: '#010101'
+                    });
+                    formularioRelato.reset(); // Limpa o formulário
+                } else { // Erro da API
+                    let errorMessage = 'Ocorreu um erro ao enviar o relato. Tente novamente.';
+                    if (responseData && responseData.message) {
+                        errorMessage = responseData.message;
+                    } else if (response.status === 401 || response.status === 403) {
+                         errorMessage = 'Sessão expirada ou não autorizado. Faça login novamente.';
+                    }
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Erro no Envio',
+                        text: errorMessage,
+                        confirmButtonColor: '#010101'
+                    });
+                }
+
+            } catch (error) {
+                console.error('Erro na requisição de relato:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erro de Conexão',
+                    text: 'Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente.',
+                    confirmButtonColor: '#010101'
+                });
+            }
         });
     }
     
