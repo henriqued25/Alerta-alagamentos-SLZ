@@ -23,9 +23,61 @@ function initMap() {
     // exemplo: carregarAlagamentosNoMapa();
 }
 
+    function updateAuthButtons() {
+        const authToken = localStorage.getItem('authToken');
+        const botaoEntrar = document.getElementById('botaoEntrar');
+        const botaoCadastrar = document.getElementById('botaoCadastrar');
+        const botaoSair = document.getElementById('botaoSair');
+
+        if (authToken) { // Usuário logado
+            if (botaoEntrar) botaoEntrar.style.display = 'none';
+            if (botaoCadastrar) botaoCadastrar.style.display = 'none';
+            if (botaoSair) botaoSair.style.display = 'block'; // Mostra o botão Sair
+        } else { // Usuário não logado
+            if (botaoEntrar) botaoEntrar.style.display = 'block'; // Mostra Entrar
+            if (botaoCadastrar) botaoCadastrar.style.display = 'block'; // Mostra Cadastrar
+            if (botaoSair) botaoSair.style.display = 'none'; // Esconde Sair
+        }
+    }
+
+    function handleLogout() {
+        Swal.fire({
+            title: 'Sair?',
+            text: "Você tem certeza que deseja sair?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Sim, sair!',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                localStorage.removeItem('authToken'); // Remove o token
+                updateAuthButtons(); // Atualiza a exibição dos botões
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Desconectado!',
+                    text: 'Você foi desconectado com sucesso.',
+                    showConfirmButton: false,
+                    timer: 1500
+                }).then(() => {
+                    // Opcional: Redirecionar para a página inicial ou de login
+                    window.location.href = 'index.html'; 
+                });
+            }
+        });
+    }
+
 
 document.addEventListener('DOMContentLoaded', function() {
     const API_BASE_URL = 'https://alerta-alagamentos-sls.onrender.com/api'; // Sua URL base da API
+
+    updateAuthButtons();
+
+    const botaoSair = document.getElementById('botaoSair');
+    if (botaoSair) {
+        botaoSair.addEventListener('click', handleLogout);
+    }
 
     // --- Menu mobile ---
     const botaoMenu = document.querySelector('.botao-menu-mobile');
