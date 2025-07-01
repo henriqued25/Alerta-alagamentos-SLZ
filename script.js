@@ -58,15 +58,18 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // 1. Coletar dados do formulário
             const localizacaoInput = document.getElementById('localizacao').value.trim();
+            const ruaAfetadaInput = document.getElementById('ruaAfetada').value.trim(); 
             const gravidadeInput = document.getElementById('gravidade').value; // Será usado para 'impactos'
             const observacoesInput = document.getElementById('observacoes').value.trim(); // Novo campo 'observacoes'
 
+            const dataOcorrencia = new Date().toISOString();
+
             // 2. Validação frontend
-            if (!localizacaoInput || !gravidadeInput) {
+            if (!localizacaoInput || !gravidadeInput || !ruaAfetadaInput) {
                 Swal.fire({
                     icon: 'warning',
                     title: 'Atenção',
-                    text: 'Por favor, preencha todos os campos obrigatórios (Localização e Gravidade)!',
+                    text: 'Por favor, preencha todos os campos obrigatórios (Bairro, Rua Afetada e Gravidade)!',
                     confirmButtonColor: '#010101'
                 });
                 return;
@@ -74,7 +77,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // 3. Preparar os dados para envio (sem latitude/longitude)
             const relatoData = {
-                bairro: localizacaoInput, 
+                data_alagamento: dataOcorrencia,
+                bairro: localizacaoInput,
+                rua_avenida: ruaAfetadaInput, 
                 impactos: gravidadeInput,   
                 observacoes: observacoesInput, 
             };
