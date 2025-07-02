@@ -1,6 +1,6 @@
-// script.js
 
-// Variável global para o mapa e marcadores;
+const API_BASE_URL = 'https://alerta-alagamentos-sls.onrender.com/api';
+
 let map;
 let markers = []; // Para armazenar os marcadores de alagamento;
 
@@ -23,56 +23,104 @@ function initMap() {
     // exemplo: carregarAlagamentosNoMapa();
 }
 
-    function updateAuthButtons() {
-        const authToken = localStorage.getItem('authToken');
-        const botaoEntrar = document.getElementById('botaoEntrar');
-        const botaoCadastrar = document.getElementById('botaoCadastrar');
-        const botaoSair = document.getElementById('botaoSair');
+function updateAuthButtons() {
+    const authToken = localStorage.getItem('authToken');
+    const botaoEntrar = document.getElementById('botaoEntrar');
+    const botaoCadastrar = document.getElementById('botaoCadastrar');
+    const botaoSair = document.getElementById('botaoSair');
 
-        if (authToken) { // Usuário logado
-            if (botaoEntrar) botaoEntrar.style.display = 'none';
-            if (botaoCadastrar) botaoCadastrar.style.display = 'none';
-            if (botaoSair) botaoSair.style.display = 'block'; // Mostra o botão Sair
-        } else { // Usuário não logado
-            if (botaoEntrar) botaoEntrar.style.display = 'block'; // Mostra Entrar
-            if (botaoCadastrar) botaoCadastrar.style.display = 'block'; // Mostra Cadastrar
-            if (botaoSair) botaoSair.style.display = 'none'; // Esconde Sair
-        }
+    if (authToken) { // Usuário logado
+        if (botaoEntrar) botaoEntrar.style.display = 'none';
+        if (botaoCadastrar) botaoCadastrar.style.display = 'none';
+        if (botaoSair) botaoSair.style.display = 'block'; // Mostra o botão Sair
+    } else { // Usuário não logado
+        if (botaoEntrar) botaoEntrar.style.display = 'block'; // Mostra Entrar
+        if (botaoCadastrar) botaoCadastrar.style.display = 'block'; // Mostra Cadastrar
+        if (botaoSair) botaoSair.style.display = 'none'; // Esconde Sair
     }
+}
 
-    function handleLogout() {
-        Swal.fire({
-            title: 'Sair?',
-            text: "Você tem certeza que deseja sair?",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Sim, sair!',
-            cancelButtonText: 'Cancelar'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                localStorage.removeItem('authToken'); // Remove o token
-                updateAuthButtons(); // Atualiza a exibição dos botões
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Desconectado!',
-                    text: 'Você foi desconectado com sucesso.',
-                    showConfirmButton: false,
-                    timer: 1500
-                }).then(() => {
-                    // Opcional: Redirecionar para a página inicial ou de login
-                    window.location.href = 'index.html'; 
-                });
+function handleLogout() {
+    Swal.fire({
+        title: 'Sair?',
+        text: "Você tem certeza que deseja sair?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Sim, sair!',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            localStorage.removeItem('authToken'); // Remove o token
+            updateAuthButtons(); // Atualiza a exibição dos botões
+            Swal.fire({
+                icon: 'success',
+                title: 'Desconectado!',
+                text: 'Você foi desconectado com sucesso.',
+                showConfirmButton: false,
+                timer: 1500
+            }).then(() => {
+                window.location.href = 'index.html'; 
+            });
+        }
+    });
+}
+
+// Função para carregar e exibir as estatísticas
+async function carregarEstatisticas() {
+    console.log('Atualizando dados do painel de estatísticas...'); 
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/complaints`); 
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const complaints = await response.json();
+
+        // 1. Quantidade de denúncias feitas (total de relatos)
+        const totalDenuncias = complaints.length;
+
+        // 2. Bairros afetados
+        const bairros = complaints.map(complaint => complaint.bairro); // Pega todos os bairros
+        const bairrosUnicos = new Set(bairros.filter(Boolean));
+        const numBairrosAfetados = bairrosUnicos.size;
+
+
+        // 4. Relatos hoje (denúncias feitas no dia atual)
+        const hoje = new Date();
+        hoje.setHours(0, 0, 0, 0);
+
+        let relatosHojeCount = 0;
+        complaints.forEach(complaint => {
+            if (complaint.data_registro) { // Verifica se a data de registro existe
+                const dataRegistro = new Date(complaint.data_registro);
+                dataRegistro.setHours(0, 0, 0, 0); 
+                if (dataRegistro.getTime() === hoje.getTime()) {
+                    relatosHojeCount++;
+                }
             }
         });
+
+        // Atualizar os elementos HTML com os dados calculados
+        document.getElementById('numAlagamentosAtivos').textContent = totalDenuncias;
+        document.getElementById('numBairrosAfetados').textContent = numBairrosAfetados;
+        document.getElementById('numRelatosHoje').textContent = relatosHojeCount;
+
+    } catch (error) {
+        console.error('Erro ao carregar estatísticas:', error);
+        document.getElementById('numAlagamentosAtivos').textContent = 'erro ao carregar.';
+        document.getElementById('numBairrosAfetados').textContent = 'erro ao carregar.';
+        document.getElementById('numRelatosHoje').textContent = 'erro ao carregar.';
     }
+}
 
 
 document.addEventListener('DOMContentLoaded', function() {
-    const API_BASE_URL = 'https://alerta-alagamentos-sls.onrender.com/api'; // Sua URL base da API
 
     updateAuthButtons();
+    carregarEstatisticas();
 
     const botaoSair = document.getElementById('botaoSair');
     if (botaoSair) {
@@ -88,8 +136,7 @@ document.addEventListener('DOMContentLoaded', function() {
         this.innerHTML = menu.classList.contains('ativo') ? 
             '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
     });
-    
-    // --- Atualização do painel (mantido por enquanto, pode ser integrado à API depois) ---
+
     function atualizarPainel() {
         console.log('Atualizando dados do painel...');
         
@@ -97,7 +144,7 @@ document.addEventListener('DOMContentLoaded', function() {
         cardsAlerta.forEach(card => {
             card.addEventListener('click', function() {
                 console.log(`Alerta clicado: ${this.querySelector('h3').textContent}`);
-                // Aqui você pode adicionar a lógica para mostrar mais detalhes
+
             });
         });
     }
@@ -111,8 +158,8 @@ document.addEventListener('DOMContentLoaded', function() {
             // 1. Coletar dados do formulário
             const localizacaoInput = document.getElementById('localizacao').value.trim();
             const ruaAfetadaInput = document.getElementById('ruaAfetada').value.trim(); 
-            const gravidadeInput = document.getElementById('gravidade').value; // Será usado para 'impactos'
-            const observacoesInput = document.getElementById('observacoes').value.trim(); // Novo campo 'observacoes'
+            const gravidadeInput = document.getElementById('gravidade').value; 
+            const observacoesInput = document.getElementById('observacoes').value.trim(); 
 
             const dataOcorrencia = new Date().toISOString();
 
@@ -127,7 +174,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
 
-            // 3. Preparar os dados para envio (sem latitude/longitude)
+            // 3. Preparar os dados para envio
             const relatoData = {
                 data_alagamento: dataOcorrencia,
                 bairro: localizacaoInput,
