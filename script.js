@@ -285,29 +285,45 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // --- Navegação suave ---
-    const linksMenu = document.querySelectorAll('.link-menu');
-    linksMenu.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            const destino = this.getAttribute('href');
-            // Fechar menu mobile se estiver ativo
-            menu.classList.remove('ativo');
-            botaoMenu.innerHTML = '<i class="fas fa-bars"></i>';
+ // --- Navegação suave ---
+const linksMenu = document.querySelectorAll('.link-menu');
+linksMenu.forEach(link => {
+    link.addEventListener('click', function(e) {
+        const destino = this.getAttribute('href');
+        const targetAttr = this.getAttribute('target'); 
 
-            if (destino.startsWith('index.html#') || destino.startsWith('#')) {
-                const targetId = destino.split('#')[1];
-                const targetElement = document.getElementById(targetId);
-                if (targetElement) {
-                    targetElement.scrollIntoView({
-                        behavior: 'smooth'
-                    });
-                }
-            } else {
-                window.location.href = destino;
+        if (targetAttr === '_blank') {
+            const menu = document.querySelector('.menu'); 
+            const botaoMenu = document.querySelector('.botao-menu-mobile');
+            if (menu && menu.classList.contains('ativo')) {
+                 menu.classList.remove('ativo');
+                 if (botaoMenu) botaoMenu.innerHTML = '<i class="fas fa-bars"></i>';
             }
-        });
+            return; 
+        }
+        
+        e.preventDefault();
+        
+        const menu = document.querySelector('.menu');
+        const botaoMenu = document.querySelector('.botao-menu-mobile');
+        if (menu && menu.classList.contains('ativo')) {
+            menu.classList.remove('ativo');
+            if (botaoMenu) botaoMenu.innerHTML = '<i class="fas fa-bars"></i>';
+        }
+
+        if (destino.startsWith('index.html#') || destino.startsWith('#')) {
+            const targetId = destino.split('#')[1];
+            const targetElement = document.getElementById(targetId);
+            if (targetElement) {
+                targetElement.scrollIntoView({
+                    behavior: 'smooth'
+                });
+            }
+        } else {
+            window.location.href = destino; 
+        }
     });
+});
     
     // --- Efeito no cabeçalho ao rolar ---
     window.addEventListener('scroll', function() {
