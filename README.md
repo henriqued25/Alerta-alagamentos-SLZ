@@ -1,45 +1,47 @@
 # Alerta Alagamentos São Luís
+## Monitore e Relate Alagamentos na Capital Maranhense
 
-Plataforma de monitoramento de alagamentos em tempo real com alertas por gravidade e painel interativo.
+---
 
-URL: https://alerta-alagamentos-slz.onrender.com
+### [site](https://alerta-alagamentos-slz.onrender.com/)
 
-# Tecnologias
-- HTML5, CSS3 (Flexbox/Grid)
-- JavaScript (responsividade)
-- Font Awesome (ícones)
+---
 
+### 📝 Sumário
 
-## ✅ Funcionalidades Implementadas
-- **Sistema de alertas visuais** por gravidade:
-  - 🔴 `perigo` (vermelho) - Risco iminente
-  - 🟠 `critico` (laranja) - Alerta elevado
-  - 🔵 `informativo` (azul) - Monitoramento
+O "Alerta Alagamentos São Luís" é uma plataforma web dedicada ao monitoramento e relato de incidentes de alagamento na cidade de São Luís, Maranhão. Nosso objetivo é fornecer dados em tempo real e um canal fácil para os cidadãos contribuírem com informações.
 
-- **Painel administrativo** com:
-  - Mapa de ocorrências
-  - Formulário de relatos
-  - Estatísticas em tempo real
-  - Notícias
+---
 
-# Estrutura de Arquivos
+### ✨ Funcionalidades
 
-projeto/
-├── index.html          ( Página principal)
-├── styles.css         (Estilos globais)
-├── script.js          (Lógica de interação)
+Este projeto oferece as seguintes funcionalidades principais:
 
+* **Painel de Estatísticas:** Visualização rápida do número total de denúncias, bairros afetados e relatos feitos no dia atual.
+* **Formulário de Relato:** Permite que usuários logados enviem novas denúncias de alagamento, informando localização, nível de gravidade e observações.
+* **Sistema de Autenticação:** Funcionalidades de Cadastro, Login e Logout para gerenciamento de usuários.
+* **Dashboard de Análise:** Uma página dedicada com um dashboard interativo (Power BI) para análise aprofundada de dados relacionados a alagamentos.
+* **Jogo Educativo:** Link direto para o jogo "Missão Enchente São Luís em Alerta".
+* **Mapa Interativo (Em Breve):** Seção destinada à visualização de alagamentos em um mapa do Google Maps (funcionalidade em desenvolvimento/).
 
-# Próximas Etapas (To-Do)
-- [ ] Integrar com API de dados reais
-- [ ] Implementar autenticação de usuários
-- [ ] Atualização de dados automatico
-- [ ] Implementar os links de outras páginas que estejam faltando
+---
 
-# Equipe 03
-| Função          | Responsável       | Contato               |
-|-----------------|-------------------|-----------------------|
-| Front-end       | [Luana Avelar]        | [luanapro84@gmail.com]       |
-| UX/UI           | [Darcarys]  | [colega@email.com]    |
+### 🛠️ Tecnologias Utilizadas
 
- Última atualização: 19/06/2025
+**Frontend:**
+* HTML5
+* CSS3
+* JavaScript
+* Google Maps API (integração planejada para exibição de alagamentos)
+ 
+---
+
+### ⚙️ API Utilizada  
+Este projeto conta com uma API desenvolvida para facilitar a comunicação entre o cliente e o servidor, garantindo uma integração eficiente com o banco de dados. Seu código-fonte e documentação podem ser acessados no repositório oficial: [⚙️ API ALerta Alagamentos SLS](https://github.com/henriqued25/alerta-alagamentos-sls).
+
+---
+
+### 🛠️ Abrir e rodar o projeto
+Para abrir e rodar o projeto, basta abrir o aquivo *"index.html"* no navegador, abri-lo com a extensão Live Server do Visual Studio Code.
+
+Mais atualizações virão em breve.
