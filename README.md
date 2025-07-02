@@ -2,6 +2,8 @@
 
 Plataforma de monitoramento de alagamentos em tempo real com alertas por gravidade e painel interativo.
 
+URL: https://alerta-alagamentos-slz.onrender.com
+
 # Tecnologias
 - HTML5, CSS3 (Flexbox/Grid)
 - JavaScript (responsividade)
